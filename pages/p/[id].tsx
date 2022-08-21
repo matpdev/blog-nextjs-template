@@ -18,8 +18,9 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
       },
     },
   });
+  let posts = JSON.stringify(post);
   return {
-    props: post,
+    props: { posts },
   };
 };
 
@@ -53,11 +54,13 @@ const Post: React.FC<PostProps> = (props) => {
     <Layout>
       <div>
         <h2>{title}</h2>
-        <p>By {props?.author?.name || "Unknown author"}</p>
+        <p>By {JSON.parse(props.posts)?.author?.name || "Unknown author"}</p>
         <ReactMarkdown children={props.content} />
-        {!props.published && userHasValidSession && postBelongsToUser && (
-          <button onClick={() => publishPost(props.id)}>Publicar</button>
-        )}
+        {!JSON.parse(props.posts).published &&
+          userHasValidSession &&
+          postBelongsToUser && (
+            <button onClick={() => publishPost(props.id)}>Publicar</button>
+          )}
         {userHasValidSession && postBelongsToUser && (
           <button onClick={() => deletePost(props.id)}>Deletar</button>
         )}

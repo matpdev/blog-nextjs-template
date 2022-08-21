@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { GetServerSideProps } from "next";
 import { useSession, getSession } from "next-auth/react";
 import Layout from "../components/Layout";
@@ -23,13 +23,15 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
       },
     },
   });
+
+  let data = JSON.stringify(drafts);
   return {
-    props: { drafts },
+    props: { data },
   };
 };
 
 type Props = {
-  drafts: PostProps[];
+  data: PostProps[];
 };
 
 const Drafts: React.FC<Props> = (props) => {
@@ -49,7 +51,7 @@ const Drafts: React.FC<Props> = (props) => {
       <div className="page">
         <h1>Meus Envios</h1>
         <main>
-          {props.drafts.map((post) => (
+          {JSON.parse(props.data)?.map((post) => (
             <div key={post.id} className="post">
               <Post post={post} />
             </div>
